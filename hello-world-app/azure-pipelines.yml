@@ -1,21 +1,26 @@
 trigger:
 - main
 
+# Use a self-hosted agent pool
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default  # Replace 'Default' with your self-hosted agent pool name
 
 steps:
+# Install Node.js
 - task: NodeTool@0
   inputs:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
 
+# Install npm dependencies
 - script: npm install
   displayName: 'Install dependencies'
 
+# Run tests
 - script: npm test
   displayName: 'Run tests'
 
+# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.SourcesDirectory)'
