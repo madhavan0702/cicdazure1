@@ -1,25 +1,35 @@
 trigger:
 - main
 
+# Use your self-hosted agent pool
 pool:
   name: Default  # your self-hosted agent pool
 
 steps:
+# Install Node.js
 - task: NodeTool@0
   inputs:
     versionSpec: '18.x'
   displayName: 'Install Node.js'
 
+# Install npm dependencies in the correct folder
 - script: npm install
   displayName: 'Install dependencies'
-  workingDirectory: '$(Build.SourcesDirectory)'
+  workingDirectory: '$(Build.SourcesDirectory)/hello-world-app'
 
+# Run tests in the correct folder (optional)
 - script: npm test
   displayName: 'Run tests'
-  workingDirectory: '$(Build.SourcesDirectory)'
+  workingDirectory: '$(Build.SourcesDirectory)/hello-world-app'
 
+# (Optional) Run your app
+- script: npm start
+  displayName: 'Run app'
+  workingDirectory: '$(Build.SourcesDirectory)/hello-world-app'
+
+# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)'
+    PathtoPublish: '$(Build.SourcesDirectory)/hello-world-app'
     ArtifactName: 'drop'
     publishLocation: 'Container'
