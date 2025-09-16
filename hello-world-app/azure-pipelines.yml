@@ -21,10 +21,10 @@ steps:
   displayName: 'Run tests'
   workingDirectory: '$(Build.SourcesDirectory)/hello-world-app'
 
-# Step 4: Remove node_modules before publishing
+# Step 4: Remove node_modules before publishing (safe)
 - script: |
     cd $(Build.SourcesDirectory)/hello-world-app
-    rmdir /s /q node_modules
+    if exist node_modules rmdir /s /q node_modules
   displayName: 'Remove node_modules before publishing'
 
 # Step 5: Publish build artifacts
@@ -34,7 +34,7 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-# Step 6: Optional - Run app locally in background (mini CD)
+# Step 6: Optional - Run the app in background (mini CD)
 - script: |
     cd $(Build.SourcesDirectory)/hello-world-app
     start /B npm start
